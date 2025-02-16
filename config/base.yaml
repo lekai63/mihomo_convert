@@ -73,6 +73,7 @@ proxies:
     port: 443
     # udp: true
     uuid: b0e80a62-8a51-47f0-91f1-f0f7faf8d9d4
+    alterId: 32
     cipher: auto
     tls: true
     servername: shoe.quarkmed.com
