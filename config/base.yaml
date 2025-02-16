@@ -66,23 +66,56 @@ proxy-providers:
     #       target: "iplc x $1"
 
 proxies:
-  # 用wss+ss失败，故用wss+vmess
-  - name: jpkk
+  - name: jpvmess
     type: vmess
     server: 185.239.224.203
     port: 443
-    # udp: true
+    udp: false
     uuid: b0e80a62-8a51-47f0-91f1-f0f7faf8d9d4
-    alterId: 32
+    alterId: 0
     cipher: auto
     tls: true
     servername: shoe.quarkmed.com
+    alpn:
+      - h2
+      - http/1.1
     network: ws
     ws-opts:
-      path: "/vv"
+      path: /vv
       headers:
         Host: "shoe.quarkmed.com"
-      v2ray-http-upgrade: true
+      v2ray-http-upgrade: false
+      v2ray-http-upgrade-fast-open: false
+
+  - name: jpss
+    type: ss
+    server: 185.239.224.203
+    port: 443
+    cipher: 2022-blake3-aes-256-gcm
+    password: AdYpH9dSSqjTtD7wI+eXvKxN9rifJai9+iQ8D+CSMk8=
+    udp: false
+    udp-over-tcp: false
+    udp-over-tcp-version: 2
+    ip-version: ipv4
+    plugin: v2ray-plugin
+    plugin-opts:
+      mode: websocket
+      host: shoe.quarkmed.com
+      path: "/ss"
+      mux: false
+      headers:
+        host: "shoe.quarkmed.com"
+      v2ray-http-upgrade: false
+    smux:
+      enabled: false
+
+    network: ws
+    ws-opts:
+      path: /vv
+      headers:
+        Host: "shoe.quarkmed.com"
+      v2ray-http-upgrade: false
+      v2ray-http-upgrade-fast-open: false
 
 rule-providers:
   Apple:
