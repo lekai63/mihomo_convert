@@ -1,0 +1,532 @@
+# <-- 基础配置 --> #
+
+# 定义锚点
+rule-anchor:
+  p: &p
+    type: http
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 600
+    # lazy: true
+    # expected-status: 204 # 当健康检查返回状态码与期望值不符时，认为节点不可用
+  r: &r
+    behavior: classical
+    interval: 86400
+    type: http
+
+proxy-providers:
+  Linuxdo:
+    <<: *p
+    url: https://flynb.site/sub?token=oLKUUBC7cJPmouRzlnw2bg&tag=clash
+    path: ./proxy-providers/Linuxdo.yaml
+    proxy: Proxy
+  Gongyi:
+    <<: *p
+    url: https://v.littlexing.eu.org/s/dd70ab275749cc4ef104129cae783f31
+    path: ./proxy-providers/Gongyi.yaml
+    proxy: Proxy
+
+  POKEMON:
+    <<: *p
+    path: ./proxy-providers/POKEMON.yaml
+    url: https://52pokemon.xz61.cn/api/v1/client/subscribe?token=c663ca5ab1eacbeabeae1dacc8766ed5
+
+  QUANTUM:
+    <<: *p
+    path: ./proxy-providers/QUANTUM.yaml
+    url: https://quantum-air.xyz/rss3/90da1103dd68ade2651c4a714bab158b
+
+  Nutbit:
+    <<: *p
+    url: https://api.nutbit-api.boats/sub?token=585a2f2f7db5ec82954f84fc58c4df10
+    path: ./proxy-providers/Nutbit.yaml
+    proxy: DIRECT
+    # header:
+    #   User-Agent:
+    #   - "Clash/v1.18.0"
+    #   - "mihomo/1.18.3"
+    # override: # 覆写节点加载时的一些配置项
+    #   skip-cert-verify: true
+    #   udp: true
+    #   down: "50 Mbps"
+    #   up: "10 Mbps"
+    #   dialer-proxy: proxy
+    #   interface-name: tailscale0
+    #   routing-mark: 233
+    #   ip-version: ipv4-prefer
+    #   additional-prefix: "[provider1]"
+    #   additional-suffix: "test"
+    #   # 名字替换，支持正则表达式
+    #   proxy-name:
+    #     - pattern: "test"
+    #       target: "TEST"
+    #     - pattern: "IPLC-(.*?)倍"
+    #       target: "iplc x $1"
+
+proxies:
+  # 用wss+ss失败，故用wss+vmess
+  - name: jpkk
+    type: vmess
+    server: 185.239.224.203
+    port: 443
+    # udp: true
+    uuid: b0e80a62-8a51-47f0-91f1-f0f7faf8d9d4
+    cipher: auto
+    tls: true
+    servername: shoe.quarkmed.com
+    network: ws
+    ws-opts:
+      path: "/vv"
+      headers:
+        Host: "shoe.quarkmed.com"
+      v2ray-http-upgrade: true
+
+rule-providers:
+  Apple:
+    <<: *r
+    path: ./rule-providers/Apple.yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple.yaml
+  DNS:
+    <<: *r
+    path: ./rule-providers/DNS.yaml
+    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/DNS/DNS.yaml
+  Proxy_Classical:
+    <<: *r
+    path: ./rule-providers/Proxy_Classical.yaml
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@release/rule/Clash/Proxy/Proxy_Classical.yaml
+  GlobalMedia:
+    <<: *r
+    path: ./rule-providers/GlobalMedia_Classical.yaml
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@release/rule/Clash/GlobalMedia/GlobalMedia_Classical.yaml
+  Github:
+    <<: *r
+    path: ./rule-providers/GitHub.yaml
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@release/rule/Clash/GitHub/GitHub.yaml
+  Gemini:
+    <<: *r
+    path: ./rule-providers/Gemini.yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Gemini/Gemini.yaml
+  Openai:
+    <<: *r
+    path: ./rule-providers/Openai.yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/OpenAI/OpenAI.yaml
+  Claude:
+    <<: *r
+    path: ./rule-providers/Claude.yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Claude/Claude.yaml
+  Copilot:
+    <<: *r
+    path: ./rule-providers/Copilot.yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Copilot/Copilot.yaml
+  SystemOTA:
+    <<: *r
+    path: ./rule-providers/SystemOTA.yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/SystemOTA/SystemOTA.yaml
+rules:
+  - DOMAIN,clash.razord.top,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+  # quarkmed域名直连
+  - DOMAIN-SUFFIX,quarkmed.com,DIRECT
+  # 去广告
+  - GEOSITE,category-ads-all,REJECT
+  # My在线规则
+  # - RULE-SET,MyProxyRule,Proxy
+  # AI
+  - DOMAIN,api.githubcopilot.com,AI
+  - DOMAIN,api.github.com,AI
+  - DOMAIN-SUFFIX,zed.dev,AI
+  - DOMAIN-KEYWORD,groq,AI
+  - DOMAIN-SUFFIX,lmsys.org,AI
+  - DOMAIN-SUFFIX,coze.com,AI
+  - RULE-SET,Openai,AI
+  - RULE-SET,Claude,AI
+  - RULE-SET,Gemini,AI
+  - RULE-SET,Copilot,AI
+  - RULE-SET,Github,Proxy
+  # system
+  - RULE-SET,Apple,DIRECT
+  - RULE-SET,SystemOTA,DIRECT
+  # Global
+  - RULE-SET,GlobalMedia,Free
+  - RULE-SET,Proxy_Classical,Proxy
+  - GEOSITE,geolocation-cn,DIRECT
+  - GEOSITE,geolocation-!cn,Proxy
+  - GEOIP,private,DIRECT
+  - GEOIP,cn,DIRECT
+  #- GEOIP,cloudflare,DIRECT
+  #- SUB-RULE,(OR,((GEOIP,ca),(GEOIP,us))),sub-vps
+  - MATCH,Proxy
+#  sub-vps:
+#  - IP-CIDR,0.0.0.0/0,America
+#  - IP-CIDR,::/0,vps
+
+# port: 7890 # HTTP(S) 代理服务器端口
+# socks-port: 7891 # SOCKS5 代理端口
+mixed-port: 7890 # HTTP(S) 和 SOCKS 代理混合端口
+# redir-port: 7892 # 透明代理端口，用于 Linux 和 MacOS
+# Transparent proxy server port for Linux (TProxy TCP and TProxy UDP)
+tproxy-port: 7892
+
+allow-lan: true # 允许局域网连接
+bind-address: "*" # 绑定 IP 地址，仅作用于 allow-lan 为 true，'*'表示所有地址
+
+#authentication: # http,socks 入口的验证用户名，密码
+# - "username:passwd"
+#skip-auth-prefixes: # 设置跳过验证的 IP 段
+#- 127.0.0.1/8
+#- ::1/128
+#- 192.168.1.0/24
+
+# lan-allowed-ips: # 允许连接的 IP 地址段，仅作用于 allow-lan 为 true, 默认值为 0.0.0.0/0 和::/0
+#   - 0.0.0.0/0
+#   - ::/0
+# lan-disallowed-ips: # 禁止连接的 IP 地址段，黑名单优先级高于白名单，默认值为空
+#   - 192.168.0.3/32
+
+#  find-process-mode has 3 values:always, strict, off
+#  - always, 开启，强制匹配所有进程
+#  - strict, 默认，由 mihomo 判断是否开启
+#  - off, 不匹配进程，推荐在路由器上使用此模式
+find-process-mode: off
+
+mode: rule
+
+geodata-mode: true
+#自定义 geodata url
+geox-url:
+  geoip: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat
+  geosite: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
+  mmdb: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb
+geo-auto-update: false # 是否自动更新 geodata
+geo-update-interval: 24 # 更新间隔，单位：小时
+
+log-level: info # 日志等级 silent/error/warning/info/debug
+
+ipv6: true # 开启 IPv6 总开关，关闭阻断所有 IPv6 链接和屏蔽 DNS 请求 AAAA 记录
+
+# tls:
+#   certificate: string # 证书 PEM 格式，或者 证书的路径
+#   private-key: string # 证书对应的私钥 PEM 格式，或者私钥路径
+#   custom-certifactes:
+#     - |
+#       -----BEGIN CERTIFICATE-----
+#       format/pem...
+#       -----END CERTIFICATE-----
+
+# external-controller: 0.0.0.0:9091 # RESTful API 监听地址
+# external-controller-tls: 0.0.0.0:9443 # RESTful API HTTPS 监听地址，需要配置 tls 部分配置文件
+# secret: "myclash" # `Authorization:Bearer ${secret}`
+# RESTful API CORS标头配置
+# external-controller-cors:
+#   allow-origins:
+#     - *
+#   allow-private-network: true
+
+# external-controller-unix: mihomo.sock
+# external-controller-pipe: \\.\pipe\mihomo
+
+# tcp-concurrent: true # TCP 并发连接所有 IP, 将使用最快握手的 TCP
+
+# 配置 WEB UI 目录，使用 http://{{external-controller}}/ui 访问
+external-ui: ./dashboard
+external-ui-name: xd
+external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
+
+# 在RESTful API端口上开启DOH服务器
+# ！！！该URL不会验证secret， 如果开启请自行保证安全问题 ！！！
+# external-doh-server: /dns-query
+
+# interface-name: en0 # 设置出口网卡
+
+# 全局 TLS 指纹，优先低于 proxy 内的 client-fingerprint
+# 可选： "chrome","firefox","safari","ios","random","none" options.
+# Utls is currently support TLS transport in TCP/grpc/WS/HTTP for VLESS/Vmess and trojan.
+global-client-fingerprint: chrome
+
+#  TCP keep alive interval
+# disable-keep-alive: false #目前在android端强制为true
+# keep-alive-idle: 15
+# keep-alive-interval: 15
+
+profile: # 存储 select 选择记录
+  store-selected: true
+  # 持久化 fake-ip
+  # store-fake-ip: true
+
+# Tun 配置
+tun:
+  enable: false
+  stack: system # gvisor/mixed
+  dns-hijack:
+    - 0.0.0.0:53 # 需要劫持的 DNS
+  # auto-detect-interface: true # 自动识别出口网卡
+  # auto-route: true # 配置路由表
+  # mtu: 9000 # 最大传输单元
+  # gso: false # 启用通用分段卸载，仅支持 Linux
+  # gso-max-size: 65536 # 通用分段卸载包的最大大小
+  # auto-redirect: false # 自动配置 iptables 以重定向 TCP 连接。仅支持 Linux。
+  # ... 还有一堆其他可配置项
+
+# 嗅探域名 可选配置
+sniffer:
+  enable: false
+  ## 对 redir-host 类型识别的流量进行强制嗅探
+  ## 如：Tun、Redir 和 TProxy 并 DNS 为 redir-host 皆属于
+  # force-dns-mapping: false
+  ## 对所有未获取到域名的流量进行强制嗅探
+  # parse-pure-ip: false
+  # 是否使用嗅探结果作为实际访问，默认 true
+  # 全局配置，优先级低于 sniffer.sniff 实际配置
+  override-destination: false
+  sniff: # TLS 和 QUIC 默认如果不配置 ports 默认嗅探 443
+    QUIC:
+    #  ports: [ 443 ]
+    TLS:
+    #  ports: [443, 8443]
+
+    # 默认嗅探 80
+    HTTP: # 需要嗅探的端口
+      ports: [80, 8080-8880]
+      # 可覆盖 sniffer.override-destination
+      override-destination: true
+  force-domain:
+    - +.google.com
+    - +.v2ex.com
+  # skip-src-address: # 对于来源ip跳过嗅探
+  #   - 192.168.0.3/32
+  # skip-dst-address: # 对于目标ip跳过嗅探
+  #   - 192.168.0.3/32
+  ## 对嗅探结果进行跳过
+  # skip-domain:
+  #   - Mijia Cloud
+  #   - dlg.io.mi.com
+  #   - +.apple.com
+
+# DNS配置
+dns:
+  cache-algorithm: arc
+  enable: true # 关闭将使用系统 DNS
+  prefer-h3: false # 是否开启 DoH 支持 HTTP/3，将并发尝试
+  listen: 0.0.0.0:53 # 开启 DNS 服务监听端口
+  ipv6: true # false 将返回 AAAA 的空结果
+  # ipv6-timeout: 300 # 单位：ms，内部双栈并发时，向上游查询 AAAA 时，等待 AAAA 的时间，默认 100ms
+
+  # 用于解析 nameserver，fallback 以及其他 DNS 服务器配置的，DNS 服务域名
+  # 只能使用纯 IP 地址，可使用加密 DNS
+  default-nameserver:
+    - 114.114.114.114
+    - 8.8.8.8
+    - tls://1.12.12.12:853
+    - tls://223.5.5.5:853
+    - system # append DNS server from system configuration. If not found, it would print an error log and skip.
+  enhanced-mode: redir-host # or fake-ip
+  # fake-ip-range: 198.18.0.1/16 # fake-ip 池设置
+  # 配置不使用 fake-ip 的域名
+  # fake-ip-filter:
+  #   - '*.lan'
+  #   - localhost.ptlogin2.qq.com
+  #   - rule-set:fakeip-filter
+  #   - geosite:fakeip-filter
+  # fake-ip-filter-mode: blacklist
+
+  use-hosts: true # 是否回应配置中的 hosts，默认 true
+
+  # 配置后面的nameserver、fallback和nameserver-policy向dns服务器的连接过程是否遵守遵守rules规则
+  # 如果为false（默认值）则这三部分的dns服务器在未特别指定的情况下会直连
+  # 如果为true，将会按照rules的规则匹配链接方式（走代理或直连），如果有特别指定则任然以指定值为准
+  # 仅当proxy-server-nameserver非空时可以开启此选项, 强烈不建议和prefer-h3一起使用
+  # 此外，这三者配置中的dns服务器如果出现域名会采用default-nameserver配置项解析，也请确保正确配置default-nameserver
+  respect-rules: false
+
+  # DNS 主要域名配置
+  # 支持 UDP，TCP，DoT，DoH，DoQ
+  # 这部分为主要 DNS 配置，影响所有直连，确保使用对大陆解析精准的 DNS
+  nameserver:
+    - dhcp://en0 # dns from dhcp
+    - 114.114.114.114 # default value
+    - 8.8.8.8 # default value
+    - tls://223.5.5.5:853 # DNS over TLS
+    - https://doh.pub/dns-query # DNS over HTTPS
+    - https://dns.alidns.com/dns-query#h3=true # 强制 HTTP/3，与 perfer-h3 无关，强制开启 DoH 的 HTTP/3 支持，若不支持将无法使用
+    - https://mozilla.cloudflare-dns.com/dns-query#DNS&h3=true # 指定策略组和使用 HTTP/3
+    - quic://dns.adguard.com:784 # DNS over QUIC
+    # - '8.8.8.8#RULES' # 效果同respect-rules，但仅对该服务器生效
+    # - '8.8.8.8#en0' # 兼容指定 DNS 出口网卡
+
+  # 当配置 fallback 时，会查询 nameserver 中返回的 IP 是否为 CN，非必要配置
+  # 当不是 CN，则使用 fallback 中的 DNS 查询结果
+  # 确保配置 fallback 时能够正常查询
+  fallback:
+    - tls://1.1.1.1:853
+    - tls://9.9.9.9:853
+    # - 'tcp://1.1.1.1#ProxyGroupName' # 指定 DNS 过代理查询，ProxyGroupName 为策略组名或节点名，过代理配置优先于配置出口网卡，当找不到策略组或节点名则设置为出口网卡
+
+  # 专用于节点域名解析的 DNS 服务器，非必要配置项，如果不填则遵循nameserver-policy、nameserver和fallback的配置
+  # proxy-server-nameserver:
+  # - https://doh.pub/dns-query
+  # - https://dns.google/dns-query
+  # - tls://one.one.one.one
+
+  # 专用于direct出口域名解析的 DNS 服务器，非必要配置项，如果不填则遵循nameserver-policy、nameserver和fallback的配置
+  # direct-nameserver:
+  #   - system://
+  # direct-nameserver-follow-policy: false # 是否遵循nameserver-policy，默认为不遵守，仅当direct-nameserver不为空时生效
+
+  fallback-filter:
+    #   配置强制 fallback，优先于 IP 判断，具体分类自行查看 geosite 库
+    GEOSITE:
+      - gfw
+    geoip: true
+    geoip-code: CN # 当 nameserver 域名的 IP 查询 geoip 库为 CN 时，不使用 fallback 中的 DNS 查询结果
+
+    # 如果不匹配 ipcidr 则使用 nameservers 中的结果
+    ipcidr:
+      - 0.0.0.0/8
+      - 10.0.0.0/8
+      - 100.64.0.0/10
+      - 127.0.0.0/8
+      - 169.254.0.0/16
+      - 172.16.0.0/12
+      - 192.0.0.0/24
+      - 192.0.2.0/24
+      - 192.88.99.0/24
+      - 192.168.0.0/16
+      - 198.18.0.0/15
+      - 198.51.100.0/24
+      - 203.0.113.0/24
+      - 224.0.0.0/4
+      - 233.252.0.0/24
+      - 240.0.0.0/4
+      - 255.255.255.255/32
+      - 74.125.127.102/32
+      - 74.125.155.102/32
+      - 74.125.39.102/32
+      - 74.125.39.113/32
+      - 209.85.229.138/32
+      - 128.121.126.139/32
+      - 159.106.121.75/32
+      - 169.132.13.103/32
+      - 192.67.198.6/32
+      - 202.106.1.2/32
+      - 202.181.7.85/32
+      - 203.161.230.171/32
+      - 203.98.7.65/32
+      - 207.12.88.98/32
+      - 208.56.31.43/32
+      - 209.145.54.50/32
+      - 209.220.30.174/32
+      - 209.36.73.33/32
+      - 211.94.66.147/32
+      - 213.169.251.35/32
+      - 216.221.188.182/32
+      - 216.234.179.13/32
+      - 37.61.54.158/32
+      - 4.36.66.178/32
+      - 46.82.174.68/32
+      - 59.24.3.173/32
+      - 64.33.88.161/32
+      - 64.33.99.47/32
+      - 64.66.163.251/32
+      - 65.104.202.252/32
+      - 65.160.219.113/32
+      - 66.45.252.237/32
+      - 69.55.52.253/32
+      - 72.14.205.104/32
+      - 72.14.205.99/32
+      - 78.16.49.15/32
+      - 8.7.198.45/32
+      - 93.46.8.89/32
+      - 37.61.54.158/32
+      - 190.93.247.4/32
+      - 190.93.246.4/32
+      - 190.93.245.4/32
+      - 190.93.244.4/32
+      - 65.49.2.178/32
+      - 189.163.17.5/32
+      - 23.89.5.60/32
+      - 49.2.123.56/32
+      - 54.76.135.1/32
+      - 77.4.7.92/32
+      - 118.5.49.6/32
+      - 159.24.3.173/32
+      - 188.5.4.96/32
+      - 197.4.4.12/32
+      - 220.250.64.24/32
+  #   domain:
+  #     - '+.google.com'
+  #     - '+.facebook.com'
+  #     - '+.youtube.com
+  # 配置查询域名使用的 DNS 服务器
+  nameserver-policy:
+    #   'www.baidu.com': '114.114.114.114'
+    #   '+.internal.crop.com': '10.0.0.1'
+    "geosite:cn,private,apple":
+      - https://doh.pub/dns-query
+      - https://dns.alidns.com/dns-query
+    "geosite:category-ads-all": rcode://success
+    # "www.baidu.com,+.google.cn": [223.5.5.5, https://dns.alidns.com/dns-query]
+    ## global，dns 为 rule-providers 中的名为 global 和 dns 规则订阅，
+    ## 且 behavior 必须为 domain/classical，当为 classical 时仅会生效域名类规则
+    # "rule-set:global,dns": 8.8.8.8
+    # rule-set:Microsoft:
+    #   - 4.2.2.1
+    #   - 4.2.2.2
+
+# proxies:
+# 财新代理 直接配置到 ZeroOmega中
+# - name: caixin
+#   type: http
+#   server: 113.207.105.149
+#   port: 30287
+#   username: lekai
+#   password: BI2r1tS5K5qZ8yn
+#   skip-cert-verify: true
+
+# 回家代理，仅在Clash verge客户端扩展，路由端不需要
+# - name: "backhome"
+#   type: vmess
+#   server: mi.cn.quarkmed.com
+#   port: 10443
+#   udp: true
+#   uuid: 2b8798ff-8b47-452e-8051-8c775616b85b
+#   alterId: 0
+#   cipher: auto
+#   tls: true
+#   servername: mi.cn.quarkmed.com
+#   # skip-cert-verify: false
+#   network: ws
+#   ws-opts:
+#     path: /vv
+#     headers:
+#       Host: mi.cn.quarkmed.com
+
+proxy-groups:
+  - name: Proxy
+    type: select
+    # disable-udp: true
+    proxies:
+      - Free
+      - Daily
+    # include-all: true
+    icon: https://r2pub.quarkmed.com/sub/connection.png
+  - name: Free
+    use:
+      - QUANTUM
+      - POKEMON
+      - Linuxdo
+    proxies:
+      - jpkk
+    type: select
+    icon: https://r2pub.quarkmed.com/sub/free.png
+  - name: Daily
+    type: select
+    use:
+      - Nutbit
+    icon: https://r2pub.quarkmed.com/sub/plane.png
+  - filter: (?i)日本|jp|Japan|美国|us|usa|新加坡|sg
+    name: AI
+    type: select
+    include-all: True
+    icon: https://r2pub.quarkmed.com/sub/ai.png

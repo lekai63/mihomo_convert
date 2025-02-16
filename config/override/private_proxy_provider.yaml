@@ -1,0 +1,48 @@
+# 定义锚点
+rule-anchor:
+  p: &p
+    type: http
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 600
+    # lazy: true
+    # expected-status: 204 # 当健康检查返回状态码与期望值不符时，认为节点不可用
+
+proxy-providers:
+  Luyuyun:
+    <<: *p
+    path: ./proxy-providers/Luyuyun.yaml
+    url: https://50209a75f3ca9555e01b0098fcbe89b8.luyuss.com
+
+proxy-groups:
+  - name: IEPL
+    type: select
+    use:
+      - Luyuyun
+    icon: https://r2pub.quarkmed.com/sub/rocket.png
+  - filter: (?i)日本|jp|Japan|美国|us|usa|新加坡|sg
+    name: AI
+    type: select
+    use:
+      - Luyuyun
+    icon: https://r2pub.quarkmed.com/sub/ai.png
+
+proxies:
+  - name: "caixin"
+    type: http
+    server: 113.207.105.149
+    port: 30287
+    username: lekai
+    password: BI2r1tS5K5qZ8yn
+    # tls: true # https
+    # skip-cert-verify: true
+    # sni: custom.com
+    # fingerprint: xxxx # 同 experimental.fingerprints 使用 sha256 指纹,配置协议独立的指纹,将忽略 experimental.fingerprints
+    # ip-version: dual
+    # headers:
+
+rules:
+  - DOMAIN-SUFFIX,caixin.com,caixin
+  - DOMAIN-KEYWORD,caixinglobal.com,caixin

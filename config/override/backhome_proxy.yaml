@@ -1,0 +1,32 @@
+proxies:
+  - name: backhome
+    type: ss
+    server: mc.quarkmed.com
+    port: 10001
+    # udp: true
+    password: AdYpH9dSSqjTtD7wI+eXvKxN9rifJai9+iQ8D+CSMk8=
+    cipher: 2022-blake3-aes-256-gcm
+
+  # - name: backhome
+  #   type: vmess
+  #   server: mc.quarkmed.com
+  #   port: 10443
+  #   udp: true
+  #   uuid: 2b8798ff-8b47-452e-8051-8c775616b85b
+  #   alterId: 0
+  #   cipher: auto
+  #   tls: true
+  #   servername: mi.cn.quarkmed.com
+  #   network: ws
+  #   ws-opts:
+  #     path: /vv
+  #     headers:
+  #       Host: mi.cn.quarkmed.com
+
+rules:
+  - DOMAIN-SUFFIX,cn.quarkmed.com,backhome
+  - IP-CIDR,192.168.1.0/24,backhome
+  - IP-CIDR,192.168.0.0/16,DIRECT
+
+hosts:
+  "*.cn.quarkmed.com": 192.168.1.201

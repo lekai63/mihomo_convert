@@ -1,0 +1,33 @@
+listeners:
+  # - name: vmess-in
+  #   type: vmess
+  #   port: 10443
+  #   listen: 0.0.0.0
+  #   users:
+  #     - username: kk
+  #       uuid: 2b8798ff-8b47-452e-8051-8c775616b85b
+  #       alterId: 0
+  #   ws-path: "/vv" # 如果不为空则开启 websocket 传输层
+
+  - name: ss-in
+    type: shadowsocks
+    port: 10001
+    listen: 0.0.0.0
+    # rule: sub-rule-name1 # 默认使用 rules，如果未找到 sub-rule 则直接使用 rules
+    # proxy: proxy # 如果不为空则直接将该入站流量交由指定 proxy 处理 (当 proxy 不为空时，这里的 proxy 名称必须合法，否则会出错)
+    # 具体密码长度要求如下：
+    # 2022-blake3-aes-128-gcm : 16位 —— 总会 err bad key
+    # 2022-blake3-aes-256-gcm : 32位
+    # 2022-blake3-chacha20-poly1305 : 32位
+    password: AdYpH9dSSqjTtD7wI+eXvKxN9rifJai9+iQ8D+CSMk8=
+    cipher: 2022-blake3-aes-256-gcm
+    udp: true
+
+external-controller: 0.0.0.0:9091 # RESTful API 监听地址
+# external-controller-tls: 0.0.0.0:9443 # RESTful API HTTPS 监听地址，需要配置 tls 部分配置文件
+secret: "myclash" # `Authorization:Bearer ${secret}`
+
+hosts:
+  # 内网nas地址
+  "*.cn.quarkmed.com": 192.168.1.201
+  "wifi.aliyun.com": 192.168.1.201
