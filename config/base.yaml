@@ -109,14 +109,6 @@ proxies:
     smux:
       enabled: false
 
-    network: ws
-    ws-opts:
-      path: /vv
-      headers:
-        Host: "shoe.quarkmed.com"
-      v2ray-http-upgrade: false
-      v2ray-http-upgrade-fast-open: false
-
 rule-providers:
   Apple:
     <<: *r
