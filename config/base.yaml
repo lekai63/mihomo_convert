@@ -551,7 +551,8 @@ proxy-groups:
       - POKEMON
       - Linuxdo
     proxies:
-      - jpkk
+      - jpvmess
+      - jpss
     type: select
     icon: https://r2pub.quarkmed.com/sub/free.png
   - name: Daily
