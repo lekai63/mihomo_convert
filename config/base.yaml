@@ -106,6 +106,7 @@ proxies:
       headers:
         host: "shoe.quarkmed.com"
       v2ray-http-upgrade: false
+      v2ray-http-upgrade-fast-open: false
     smux:
       enabled: false
 
