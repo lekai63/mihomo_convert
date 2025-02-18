@@ -33,6 +33,18 @@ proxies:
     server: byedpi
     port: 1080
 
+proxy-groups:
+  - name: Free
+    use:
+      - QUANTUM
+      - POKEMON
+      - Linuxdo
+    proxies:
+      - jpvmess
+      - byedpi
+    type: select
+    icon: https://r2pub.quarkmed.com/sub/free.png
+
 hosts:
   # 内网nas地址
   "*.cn.quarkmed.com": 192.168.1.201
