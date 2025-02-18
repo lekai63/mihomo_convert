@@ -27,6 +27,12 @@ external-controller: 0.0.0.0:9091 # RESTful API 监听地址
 # external-controller-tls: 0.0.0.0:9443 # RESTful API HTTPS 监听地址，需要配置 tls 部分配置文件
 secret: "myclash" # `Authorization:Bearer ${secret}`
 
+proxies:
+  - name: byedpi
+    type: socks5
+    server: byedpi
+    port: 1080
+
 hosts:
   # 内网nas地址
   "*.cn.quarkmed.com": 192.168.1.201
