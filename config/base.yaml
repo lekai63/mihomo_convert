@@ -386,6 +386,8 @@ dns:
   # 当不是 CN，则使用 fallback 中的 DNS 查询结果
   # 确保配置 fallback 时能够正常查询
   fallback:
+    - https://1.1.1.1/dns-query
+    - https://[2620:fe::fe]/dns-query
     - tls://1.1.1.1:853
     - tls://9.9.9.9:853
     # - 'tcp://1.1.1.1#ProxyGroupName' # 指定 DNS 过代理查询，ProxyGroupName 为策略组名或节点名，过代理配置优先于配置出口网卡，当找不到策略组或节点名则设置为出口网卡
