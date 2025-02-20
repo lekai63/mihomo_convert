@@ -17,17 +17,6 @@ rule-anchor:
     type: http
 
 proxy-providers:
-  Linuxdo:
-    <<: *p
-    url: https://flynb.site/sub?token=oLKUUBC7cJPmouRzlnw2bg&tag=clash
-    path: ./proxy-providers/Linuxdo.yaml
-    proxy: Proxy
-  Gongyi:
-    <<: *p
-    url: https://v.littlexing.eu.org/s/dd70ab275749cc4ef104129cae783f31
-    path: ./proxy-providers/Gongyi.yaml
-    proxy: Proxy
-
   POKEMON:
     <<: *p
     path: ./proxy-providers/POKEMON.yaml
@@ -544,7 +533,6 @@ proxy-groups:
     use:
       - QUANTUM
       - POKEMON
-      - Linuxdo
     proxies:
       - jpvmess
     type: select
