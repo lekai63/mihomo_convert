@@ -55,19 +55,14 @@ proxy-providers:
     #       target: "iplc x $1"
 
 proxies:
-  - name: jpvmess
-    type: vmess
+  - name: jpvless
+    type: vless
     server: 185.239.224.203
     port: 443
-    udp: false
+    udp: true
     uuid: b0e80a62-8a51-47f0-91f1-f0f7faf8d9d4
-    alterId: 0
-    cipher: auto
     tls: true
     servername: shoe.quarkmed.com
-    alpn:
-      - h2
-      - http/1.1
     network: ws
     ws-opts:
       path: /vv
@@ -513,7 +508,7 @@ proxy-groups:
       - QUANTUM
       - POKEMON
     proxies:
-      - jpvmess
+      - jpvless
     type: select
     icon: https://r2pub.quarkmed.com/sub/free.png
   - name: Daily
